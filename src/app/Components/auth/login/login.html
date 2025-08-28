@@ -1,0 +1,91 @@
+<div
+    class="container-fluid d-flex align-items-center justify-content-center min-vh-100 bg-black position-relative overflow-hidden">
+
+    <!-- Toast notification -->
+    <div class="toast-notification position-absolute top-0 start-50 translate-middle-x mt-3 px-4 py-2 rounded shadow-lg text-center"
+        [class.show]="notification.show" [class.error]="notification.type === 'error'"
+        [class.success]="notification.type === 'success'">
+        {{ notification.message }}
+    </div>
+
+    <!-- Responsive row -->
+    <div class="row w-100 justify-content-center">
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 col-xl-4">
+
+            <!-- Login card -->
+            <div class="login-container shadow-lg">
+
+                <!-- Illustration -->
+                <div class="illustration text-center">
+                    <img src="login.png" alt="Login" class="img-fluid rounded">
+                </div>
+
+                <h2 class="welcome-title">Welcome Back</h2>
+
+                <!-- Form -->
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+                    <!-- Email -->
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="email">Email Address</label>
+                        <input type="email" id="email" class="form-input form-control"
+                            [class.invalid]="isFieldInvalid('email')" [class.valid]="isFieldValid('email')"
+                            formControlName="email" placeholder="your.email@example.com" autocomplete="email" />
+                        <div class="error-message">
+                            <div class="error-bar" [class.show]="isFieldInvalid('email')">
+                                @if(loginForm.get('email')?.errors?.['required']){
+                                <div>Email is required</div>
+                                }
+                                @if(loginForm.get('email')?.errors?.['email']){
+                                <div>Enter a valid email</div>
+                                }
+                                @if(loginForm.get('email')?.errors?.['backend']){
+                                <div>{{ loginForm.get('email')?.errors?.['backend'] }}</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="password">Password</label>
+                        <input type="password" id="password" class="form-input form-control"
+                            [class.invalid]="isFieldInvalid('password')" [class.valid]="isFieldValid('password')"
+                            formControlName="password" placeholder="••••••••" autocomplete="current-password" />
+                        <div class="error-message">
+                            <div class="error-bar" [class.show]="isFieldInvalid('password')">
+                                @if(loginForm.get('password')?.errors?.['required'])
+                                { <div>Password is required</div>}
+                                @if(loginForm.get('password')?.errors?.['minlength'])
+                                { <div>At least 12 characters</div>
+                                }
+                                @if(loginForm.get('password')?.errors?.['pattern'])
+                                { <div>Must include uppercase, number & special character</div>
+                                }
+                                @if(loginForm.get('password')?.errors?.['backend'])
+                                { <div>{{ loginForm.get('password')?.errors?.['backend'] }}</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="login-btn btn w-100" [class.loading]="isLoading"
+                        [disabled]="loginForm.invalid || isLoading">
+                        @if(!isLoading)
+                        { <span>Login</span>
+                        }
+                        @if(isLoading)
+                        { <div class="loading-spinner"></div>
+                        }
+                    </button>
+                </form>
+
+                <div class="register-section text-center mt-4 pt-3 border-top">
+                    <span>Don't have an account?</span>
+                    <a href="#" (click)="onRegister($event)">Register</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
