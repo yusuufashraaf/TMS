@@ -1,0 +1,165 @@
+<div class="dashboard-container">
+    <!-- Header Section -->
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">Dashboard Overview</h1>
+        <p class="dashboard-subtitle">Quick glance at your task management system</p>
+    </div>
+
+    <!-- Stats Cards Row -->
+    <div class="stats-grid">
+        <div class="stat-card total">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2.5-9H18V0h-2v2H8V0H6v2H3.5A1.5 1.5 0 002 3.5v15A1.5 1.5 0 003.5 20h17a1.5 1.5 0 001.5-1.5v-15A1.5 1.5 0 0020.5 2z" />
+                </svg>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-number">{{ dashboardData.totalTasks }}</h3>
+                <p class="stat-label">Total Tasks</p>
+                <span class="stat-change positive">+{{ dashboardData.tasksThisMonth }} tasks this month</span>
+            </div>
+        </div>
+
+        <div class="stat-card completed">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+                </svg>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-number">{{ dashboardData.completedTasks }}</h3>
+                <p class="stat-label">Completed Tasks</p>
+                <span class="stat-change">{{ getCompletionPercentage() }}% of all tasks completed</span>
+            </div>
+        </div>
+
+        <div class="stat-card pending">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M6 2v6h0.01L6 8.01 10 12l-4 4 0.01.01H6V22h12v-5.99h-0.01L18 16.01 14 12l4-4-0.01-0.01H18V2H6z" />
+                </svg>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-number">{{ dashboardData.pendingTasks }}</h3>
+                <p class="stat-label">Pending Tasks</p>
+                <span class="stat-change">Currently in progress</span>
+            </div>
+        </div>
+
+        <div class="stat-card overdue">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                </svg>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-number">{{ dashboardData.overdueTasks }}</h3>
+                <p class="stat-label">Overdue Tasks</p>
+                <span class="stat-change urgent">Immediate attention required</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="charts-grid">
+        <!-- Task Status Breakdown Chart -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>Task Status Breakdown</h3>
+                <p>Completed vs. Pending Tasks</p>
+            </div>
+            <div class="chart-container">
+                <div class="donut-chart" #donutChart>
+                    <svg viewBox="0 0 200 200" class="donut-svg">
+                        <circle cx="100" cy="100" r="80" fill="transparent" stroke="#4ade80" stroke-width="30"
+                            [attr.stroke-dasharray]="getCompletedArc()" stroke-dashoffset="0"
+                            transform="rotate(-90 100 100)" class="completed-arc"></circle>
+                        <circle cx="100" cy="100" r="80" fill="transparent" stroke="#3b82f6" stroke-width="30"
+                            [attr.stroke-dasharray]="getPendingArc()" [attr.stroke-dashoffset]="getCompletedArcLength()"
+                            transform="rotate(-90 100 100)" class="pending-arc"></circle>
+                    </svg>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <span class="legend-color completed"></span>
+                        <span>Completed Tasks</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color pending"></span>
+                        <span>Pending Tasks</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks by Priority Chart -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>Tasks by Priority</h3>
+                <p>Distribution of tasks across priority levels</p>
+            </div>
+            <div class="chart-container">
+                <div class="bar-chart">
+                    @for (priority of dashboardData.priorityData; track $index) {
+                    <div class="bar-item">
+                        <div class="bar" [style.height.%]="(priority.value / getMaxPriorityValue()) * 100"
+                            [class]="'priority-' + priority.name.toLowerCase()">
+                        </div>
+                        <span class="bar-label">{{ priority.name }}</span>
+                        <span class="bar-value">{{ priority.value }}</span>
+                    </div>
+                    }
+                </div>
+                <div class="chart-y-axis">
+                    <span>60</span>
+                    <span>45</span>
+                    <span>30</span>
+                    <span>15</span>
+                    <span>0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activities Table -->
+    <div class="activities-card">
+        <div class="activities-header">
+            <h3>Recent Activities</h3>
+            <p>Overview of the latest task updates and upcoming deadlines.</p>
+        </div>
+        <div class="activities-table-container">
+            <table class="activities-table">
+                <thead>
+                    <tr>
+                        <th>Task ID</th>
+                        <th>Title</th>
+                        <th>Due Date</th>
+                        <th>Assigned To</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (activity of recentActivities; track $index) {
+                    <tr>
+                        <td class="task-id">{{ activity._id }}</td>
+                        <td class="task-title">{{ activity.title }}</td>
+                        <td class="task-date">{{ activity.deadline }}</td>
+                        <td class="task-assignee">
+                            {{ getAssignedNames(activity) }}
+                        </td>
+                        <td class="task-status">
+                            <span class="status-badge" [class]="'status-' + activity.status.toLowerCase()">
+                                {{ activity.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
