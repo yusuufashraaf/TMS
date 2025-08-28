@@ -17,7 +17,8 @@
             <div class="stat-content">
                 <h3 class="stat-number">{{ dashboardData.totalTasks }}</h3>
                 <p class="stat-label">Total Tasks</p>
-                <span class="stat-change positive">+{{ dashboardData.tasksThisMonth }} tasks this month</span>
+                <span class="stat-change positive">
+                    +{{ dashboardData.tasksThisMonth }} tasks this month </span>
             </div>
         </div>
 
@@ -65,7 +66,7 @@
 
     <!-- Charts Row -->
     <div class="charts-grid">
-        <!-- Task Status Breakdown Chart -->
+        <!-- Task Status Donut Chart -->
         <div class="chart-card">
             <div class="chart-header">
                 <h3>Task Status Breakdown</h3>
@@ -74,7 +75,7 @@
             <div class="chart-container">
                 <div class="donut-chart" #donutChart>
                     <svg viewBox="0 0 200 200" class="donut-svg">
-                        <circle cx="100" cy="100" r="80" fill="transparent" stroke="#4ade80" stroke-width="30"
+                        <circle cx="100" cy="100" r="80" fill="transparent" stroke="#10b981" stroke-width="30"
                             [attr.stroke-dasharray]="getCompletedArc()" stroke-dashoffset="0"
                             transform="rotate(-90 100 100)" class="completed-arc"></circle>
                         <circle cx="100" cy="100" r="80" fill="transparent" stroke="#3b82f6" stroke-width="30"
@@ -84,18 +85,16 @@
                 </div>
                 <div class="chart-legend">
                     <div class="legend-item">
-                        <span class="legend-color completed"></span>
-                        <span>Completed Tasks</span>
+                        <span class="legend-color completed"></span>Completed Tasks
                     </div>
                     <div class="legend-item">
-                        <span class="legend-color pending"></span>
-                        <span>Pending Tasks</span>
+                        <span class="legend-color pending"></span>Pending Tasks
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Tasks by Priority Chart -->
+        <!-- Tasks by Priority Bar Chart -->
         <div class="chart-card">
             <div class="chart-header">
                 <h3>Tasks by Priority</h3>
@@ -105,8 +104,8 @@
                 <div class="bar-chart">
                     @for (priority of dashboardData.priorityData; track $index) {
                     <div class="bar-item">
-                        <div class="bar" [style.height.%]="(priority.value / getMaxPriorityValue()) * 100"
-                            [class]="'priority-' + priority.name.toLowerCase()">
+                        <div class="bar" [class]="'priority-' + priority.name.toLowerCase()"
+                            [style.height.%]="priority.value > 0 ? (priority.value / getMaxPriorityValue()) * 100 : 0">
                         </div>
                         <span class="bar-label">{{ priority.name }}</span>
                         <span class="bar-value">{{ priority.value }}</span>
