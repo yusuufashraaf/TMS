@@ -62,8 +62,15 @@ export class Dashboard implements OnInit {
     return max > 0 ? max : 1;
   }
   getAssignedNames(task: Task): string {
-    if (!task.assignedTo || task.assignedTo.length === 0) return '-';
-    return task.assignedTo.map((a) => a.name).join(', ');
+    if (!task.assignedTo) return '-';
+
+    const assignedArray = Array.isArray(task.assignedTo)
+      ? task.assignedTo
+      : [task.assignedTo];
+
+    if (assignedArray.length === 0) return '-';
+
+    return assignedArray.map((a) => a.name).join(', ');
   }
 
   // Donut chart calculations
