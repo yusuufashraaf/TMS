@@ -1,0 +1,233 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+}
+
+/* Login container */
+.login-container {
+  background: rgba(45, 55, 72, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 32px;
+  width: 400px;
+  max-width: 92vw;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Illustration */
+.illustration {
+  background: linear-gradient(135deg, #40e0ff 0%, #a78bfa 100%);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  overflow: hidden;
+}
+.illustration img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Typography */
+.welcome-title {
+  color: #fff;
+  font-size: 26px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 24px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Form styles */
+.form-group {
+  margin-bottom: 18px;
+}
+.form-label {
+  color: #a0aec0;
+  font-size: 14px;
+  margin-bottom: 6px;
+  display: block;
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  background: linear-gradient(135deg, #f8fcff, #e8f0ff);
+  color: #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.form-input.valid {
+  border: 3px solid #28a745;
+}
+.form-input.invalid {
+  border: 3px solid #dc3545;
+}
+.form-input::placeholder {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.error-message {
+  position: relative;
+  height: 30px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.error-bar {
+  display: flex;
+  align-items: center;
+  background-color: red;
+  color: #fff;
+  padding: 2px 15px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Show bar when error exists */
+.error-bar.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Buttons */
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.login-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(66, 153, 225, 0.25);
+}
+.login-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.login-btn.loading {
+  color: transparent;
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  position: absolute;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.register-section {
+  text-align: center;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.register-section span {
+  color: #a0aec0;
+  font-size: 14px;
+}
+.register-section a {
+  color: #4299e1;
+  font-weight: 500;
+  margin-left: 5px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.register-section a:hover {
+  color: #63b3ed;
+  text-decoration: underline;
+}
+
+/* Toast notification (top center) */
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #fff;
+  z-index: 1100;
+  opacity: 0;
+  pointer-events: none;
+}
+.toast-notification.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.toast-notification.error {
+  background: #f56565;
+}
+.toast-notification.success {
+  background: #48bb78;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .login-container {
+    width: 90%;
+    padding: 24px;
+  }
+  .welcome-title {
+    font-size: 22px;
+    margin-bottom: 18px;
+  }
+  .illustration {
+    min-height: 100px;
+    padding: 16px;
+  }
+}
+@media (max-width: 480px) {
+  .login-container {
+    padding: 20px;
+  }
+  .welcome-title {
+    font-size: 20px;
+  }
+  .form-input {
+    font-size: 14px;
+    padding: 12px;
+  }
+  .login-btn {
+    font-size: 14px;
+    padding: 12px;
+  }
+}
