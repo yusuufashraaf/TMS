@@ -1,0 +1,53 @@
+<nav class="navbar">
+    <div class="navbar-container">
+
+        <!-- Navigation Menu -->
+        <div class="navbar-nav" [class.show]="isMobileMenuOpen">
+            <a class="nav-link" [class.active]="activeRoute === 'dashboard'" (click)="setActiveRoute('dashboard')"
+                routerLink="/dashboard">
+                Dashboard
+            </a>
+            <a class="nav-link" [class.active]="activeRoute === 'projects'" (click)="setActiveRoute('projects')"
+                routerLink="/projects">
+                Projects
+            </a>
+            <a class="nav-link" [class.active]="activeRoute === 'tasks'" (click)="setActiveRoute('tasks')"
+                routerLink="/tasks">
+                Tasks
+            </a>
+            <a class="nav-link" [class.active]="activeRoute === 'notifications'"
+                (click)="setActiveRoute('notifications')" routerLink="/notifications">
+                Notifications
+            </a>
+            <a class="nav-link" [class.active]="activeRoute === 'reports'" (click)="setActiveRoute('reports')"
+                routerLink="/reports">
+                Reports
+            </a>
+
+            <!-- Mobile logout button (only shows on mobile via CSS) -->
+            <div class="mobile-logout">
+                <button class="logout-btn mobile w-100 d-lg-none" (click)="onLogout()" type="button">
+                    Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- Desktop logout button -->
+        <div class="navbar-actions desktop-only">
+            <button class="logout-btn" (click)="onLogout()" type="button">
+                Logout
+            </button>
+        </div>
+
+    </div>
+</nav>
+
+<!-- Mobile menu overlay -->
+<div class="mobile-overlay" [class.show]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+
+<!-- Mobile menu toggle -->
+<button class="mobile-menu-toggle" (click)="toggleMobileMenu()" [class.open]="isMobileMenuOpen">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
