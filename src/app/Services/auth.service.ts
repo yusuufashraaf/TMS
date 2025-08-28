@@ -2,7 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, tap } from 'rxjs';
-
+// Export the interface so it can be imported elsewhere
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'Admin' | 'User';
+}
 @Injectable({
   providedIn: 'root',
 })

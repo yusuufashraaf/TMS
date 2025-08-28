@@ -1,3 +1,5 @@
+<!-- Only show navbar if logged in -->
+@if (isAdmin) {
 <nav class="navbar">
     <div class="navbar-container">
 
@@ -7,10 +9,12 @@
                 routerLink="/dashboard">
                 Dashboard
             </a>
+            @if (isAdmin) {
             <a class="nav-link" [class.active]="activeRoute === 'projects'" (click)="setActiveRoute('projects')"
                 routerLink="/projects">
                 Projects
             </a>
+            }
             <a class="nav-link" [class.active]="activeRoute === 'tasks'" (click)="setActiveRoute('tasks')"
                 routerLink="/tasks">
                 Tasks
@@ -19,12 +23,13 @@
                 (click)="setActiveRoute('notifications')" routerLink="/notifications">
                 Notifications
             </a>
+            @if(isAdmin){
             <a class="nav-link" [class.active]="activeRoute === 'reports'" (click)="setActiveRoute('reports')"
                 routerLink="/reports">
                 Reports
             </a>
-
-            <!-- Mobile logout button (only shows on mobile via CSS) -->
+            }
+            <!-- Mobile logout button -->
             <div class="mobile-logout">
                 <button class="logout-btn mobile w-100 d-lg-none" (click)="onLogout()" type="button">
                     Logout
@@ -41,7 +46,7 @@
 
     </div>
 </nav>
-
+}
 <!-- Mobile menu overlay -->
 <div class="mobile-overlay" [class.show]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
 
