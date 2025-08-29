@@ -1,0 +1,155 @@
+<div class="signup-container">
+    <!-- Toast notification -->
+    <div class="toast-notification position-absolute top-0 start-50 translate-middle-x mt-3 px-4 py-2 rounded shadow-lg text-center"
+        [class.show]="notification.show" [class.error]="notification.type === 'error'"
+        [class.success]="notification.type === 'success'">
+        {{ notification.message }}
+    </div>
+
+    <div class="signup-card">
+        <div class="header">
+            <h1 class="title">Create Your Account</h1>
+            <p class="subtitle">Join the Task Management System to streamline your projects.</p>
+        </div>
+
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="form">
+
+            <!-- Name Field -->
+            <div class="form-group">
+                <label for="name" class="label">Name</label>
+                <input id="name" type="text" formControlName="name" class="input" placeholder="Your Name"
+                    [class.error]="signupForm.get('name')?.invalid && signupForm.get('name')?.touched" />
+                @if(signupForm.get('name')?.invalid && signupForm.get('name')?.touched){
+                <div class="error-message">
+                    @if(signupForm.get('name')?.errors?.['required']){
+                    <span>Name is required</span>
+                    }
+                    @if(signupForm.get('name')?.errors?.['minlength']){
+                    <span>Name must be at least 3 characters</span>
+                    }
+                </div>
+                }
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-group">
+                <label for="email" class="label">Email</label>
+                <input id="email" type="email" formControlName="email" class="input"
+                    placeholder="your.email@example.com"
+                    [class.error]="signupForm.get('email')?.invalid && signupForm.get('email')?.touched" />
+                @if(signupForm.get('email')?.invalid && signupForm.get('email')?.touched){
+                <div class="error-message">
+                    @if(signupForm.get('email')?.errors?.['required']){
+                    <span>Email is required</span>
+                    }
+                    @if(signupForm.get('email')?.errors?.['email']){
+                    <span>Please enter a valid email</span>
+                    }
+                </div>
+                }
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group">
+                <label for="password" class="label">Password</label>
+                <div class="password-input">
+                    <input id="password" [type]="showPassword() ? 'text' : 'password'" formControlName="password"
+                        class="input" placeholder="••••••••"
+                        [class.error]="signupForm.get('password')?.invalid && signupForm.get('password')?.touched" />
+                    <button type="button" class="toggle-password" (click)="togglePassword()"
+                        aria-label="Toggle password visibility">
+                        @if(!showPassword()){
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                        }
+                        @if(showPassword()){
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                            <path d="M1 1l22 22" />
+                        </svg>
+                        }
+                    </button>
+                </div>
+                @if(signupForm.get('password')?.invalid && signupForm.get('password')?.touched){
+                <div class="error-message">
+                    @if(signupForm.get('password')?.errors?.['required']){
+                    <span>Password is required</span>
+                    }
+                    @if(signupForm.get('password')?.errors?.['minlength']){
+                    <span>Password must be at least 12 characters</span>
+                    }
+                </div>
+                }
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="form-group">
+                <label for="confirmPassword" class="label">Confirm Password</label>
+                <div class="password-input">
+                    <input id="confirmPassword" [type]="showConfirmPassword() ? 'text' : 'password'"
+                        formControlName="confirmPassword" class="input" placeholder="••••••••"
+                        [class.error]="signupForm.get('confirmPassword')?.invalid && signupForm.get('confirmPassword')?.touched" />
+                    <button type="button" class="toggle-password" (click)="toggleConfirmPassword()"
+                        aria-label="Toggle confirm password visibility">
+                        @if(!showConfirmPassword()){
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                        }
+                        @if(showConfirmPassword()){
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                            <path d="M1 1l22 22" />
+                        </svg>
+                        }
+                    </button>
+                </div>
+                @if(signupForm.get('confirmPassword')?.invalid && signupForm.get('confirmPassword')?.touched){
+                <div class="error-message">
+                    @if(signupForm.get('confirmPassword')?.errors?.['required']){
+                    <span>Please confirm your password</span>
+                    }
+                    @if(signupForm.get('confirmPassword')?.errors?.['mismatch']){
+                    <span>Passwords do not match</span>
+                    }
+                </div>
+                }
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-button" [disabled]="signupForm.invalid || isLoading()">
+                @if(!isLoading()){
+                <span>Sign Up</span>
+                }
+                @if(isLoading()){
+                <span class="loading">
+                    <svg class="spinner" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"
+                            opacity="0.25" />
+                        <path fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            opacity="0.75" />
+                    </svg>
+                    Creating Account...
+                </span>
+                }
+            </button>
+        </form>
+
+        <div class="footer">
+            <p class="login-text">
+                Already have an account?
+                <button type="button" class="link-button" (click)="onLoginClick()">Log In</button>
+            </p>
+        </div>
+    </div>
+</div>
