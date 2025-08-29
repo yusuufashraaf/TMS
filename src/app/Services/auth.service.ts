@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, tap } from 'rxjs';
+import { environment } from '../../environment/environment.prod';
 
 export interface User {
   id: string;
@@ -15,7 +16,7 @@ export interface User {
 })
 export class AuthService {
   private tokenCheckInterval!: number;
-  private baseUrl = 'http://localhost:8000/api/v1/auth';
+  private baseUrl = `${environment.apiUrl}/auth`;
   public currentUser = new BehaviorSubject<User | null>(null);
 
   constructor(private http: HttpClient, private router: Router) {
