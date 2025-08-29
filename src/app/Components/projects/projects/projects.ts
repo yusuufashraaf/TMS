@@ -6,6 +6,7 @@ import { TaskService, Task } from '../../../Services/task.service';
 import { AuthService } from '../../../Services/auth.service';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { PdfService } from '../../../Services/pdf.service';
 
 @Component({
   selector: 'app-project-overview',
@@ -15,6 +16,12 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./projects.css'],
 })
 export class Projects implements OnInit {
+  notification = {
+    show: false,
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+  };
+
   projects: Project[] = [];
   searchTerm: string = '';
   selectedStatus: string = 'All Statuses';
@@ -48,13 +55,27 @@ export class Projects implements OnInit {
   constructor(
     private projectService: ProjectService,
     private taskService: TaskService,
-    private authService: AuthService
+    private authService: AuthService,
+    private pdfService: PdfService
   ) {}
   ngOnInit(): void {
     this.loadUsers().then(() => {
       this.loadProjects();
     });
   }
+
+  private showNotification(
+    message: string,
+    type: 'success' | 'error' | 'info'
+  ) {
+    this.notification = { show: true, message, type };
+    setTimeout(() => this.hideNotification(), 3000);
+  }
+
+  private hideNotification() {
+    this.notification.show = false;
+  }
+
   // ================= Validation Methods =================
   validateProjectField(fieldName: string): string {
     if (!this.projectFormTouched[fieldName]) return '';
@@ -503,6 +524,21 @@ export class Projects implements OnInit {
         );
 
       return matchesSearch && matchesStatus && matchesPriority && matchesUser;
+    });
+  }
+
+  downloadProjectPDF(projectId: string) {
+    this.pdfService.downloadProjectPDF(projectId).subscribe({
+      next: (blob) => {
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `project_${projectId}.pdf`;
+        link.click();
+      },
+      error: (err) => {
+        console.error('Failed to download PDF', err);
+        this.showNotification('Failed to download PDF', 'error');
+      },
     });
   }
 }

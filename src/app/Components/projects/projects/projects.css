@@ -158,7 +158,11 @@
   background: #38a169;
   color: #ffffff;
 }
-
+.secondary-btn {
+  background: black;
+  color: #ffffff;
+  margin-right: 7px;
+}
 .edit-btn:hover {
   background: #2f855a;
 }
@@ -166,7 +170,6 @@
 .delete-btn {
   background: #e53e3e;
   color: #ffffff;
-  margin-right: 7px;
 }
 
 .delete-btn:hover {
@@ -754,4 +757,35 @@
   .form-group label {
     font-size: 0.85rem;
   }
+}
+/* Toast Notification */
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.toast-notification.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.toast-notification.success {
+  background-color: #4caf50;
+  color: white;
+}
+
+.toast-notification.error {
+  background-color: #f44336;
+  color: white;
 }
