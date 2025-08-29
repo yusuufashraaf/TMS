@@ -32,6 +32,15 @@
                     <option value="Low">Low</option>
                 </select>
             </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Sort by deadline date:</label>
+                <select class="filter-select" (change)="onSortChange($event)">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </div>
+
         </div>
     </div>
 
