@@ -1,0 +1,118 @@
+<div class="task-manager-container">
+    <!-- Toast Notification -->
+    <div class="toast-notification" [class.show]="notification.show" [class.success]="notification.type === 'success'"
+        [class.error]="notification.type === 'error'">
+        {{ notification.message }}
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1 class="title">My Tasks</h1>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-container">
+        <div class="filters-row">
+            <div class="filter-group">
+                <label class="filter-label">Filter by Status:</label>
+                <select class="filter-select" [(ngModel)]="filters.status" (change)="applyFilters()">
+                    <option value="all">All Statuses</option>
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Filter by Priority:</label>
+                <select class="filter-select" [(ngModel)]="filters.priority" (change)="applyFilters()">
+                    <option value="all">All Priorities</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tasks Container -->
+    <div class="tasks-container">
+        <ng-container *ngIf="filteredTasks.length > 0; else noTasks">
+            <ng-container *ngFor="let task of filteredTasks; trackBy: trackByTaskId">
+                <div class="task-card" [attr.data-priority]="task.priority" [attr.data-status]="task.status">
+                    <div class="task-header">
+                        <h3 class="task-title">{{ task.title }}</h3>
+                        <span class="priority-badge" [class]="'priority-' + task.priority">
+                            {{ task.priority | titlecase }}
+                        </span>
+                    </div>
+
+                    <p class="task-description">{{ task.description }}</p>
+
+                    <div class="task-meta">
+                        <span class="task-due">
+                            <strong>Due:</strong> {{ task.deadline | date:'yyyy-MM-dd' }}
+                        </span>
+                    </div>
+
+                    <div class="task-footer">
+                        <div class="user-info">
+                            <div class="user-details">
+                                <p class="user-name">{{ getAssignedUserName(task) }}</p>
+                                <select class="status-dropdown" [value]="task.status"
+                                    (change)="updateTaskStatus(task._id!, $event)">
+                                    <option value="Pending">Pending</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+
+        <!-- No tasks message -->
+        <ng-template #noTasks>
+            <div class="no-tasks">
+                <i class="fas fa-tasks no-tasks-icon"></i>
+                <h3>No tasks found</h3>
+                <p>Try adjusting your filters or create a new task.</p>
+            </div>
+        </ng-template>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+        <div class="loading-spinner">
+            <svg class="spinner" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" opacity="0.25" />
+                <path fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    opacity="0.75" />
+            </svg>
+            <span>Loading tasks...</span>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-container" *ngIf="totalPages > 1">
+        <nav aria-label="Task pagination">
+            <ul class="pagination">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                    <button class="page-link" (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+                </li>
+
+                <li class="page-item" *ngFor="let page of getPageNumbers(); trackBy: trackByPage"
+                    [class.active]="page === currentPage">
+                    <button class="page-link" (click)="goToPage(page)">{{ page }}</button>
+                </li>
+
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <button class="page-link" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+</div>

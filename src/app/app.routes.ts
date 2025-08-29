@@ -4,6 +4,7 @@ import { Dashboard } from './Components/dashboard/dashboard/dashboard';
 import { authGuardGuard } from './Guards/auth-guard-guard';
 import { Projects } from './Components/projects/projects/projects';
 import { Register } from './Components/auth/register/register';
+import { Tasks } from './Components/tasks/tasks/tasks';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -11,4 +12,5 @@ export const routes: Routes = [
   { path: 'dashboard', component: Dashboard, canActivate: [authGuardGuard] },
   { path: 'projects', component: Projects, canActivate: [authGuardGuard] },
   { path: 'register', component: Register },
+  { path: 'tasks', component: Tasks },
 ];
