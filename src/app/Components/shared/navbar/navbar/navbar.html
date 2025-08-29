@@ -21,12 +21,7 @@
                 routerLink="/tasks">
                 Tasks
             </a>
-            @if(isAdmin){
-            <a class="nav-link" [class.active]="activeRoute === 'reports'" (click)="setActiveRoute('reports')"
-                routerLink="/reports">
-                Reports
-            </a>
-            }
+
             <!-- Mobile logout button -->
             <div class="mobile-logout">
                 <button class="logout-btn mobile w-100 d-lg-none" (click)="onLogout()" type="button">
