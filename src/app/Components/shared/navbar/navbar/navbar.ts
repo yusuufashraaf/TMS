@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { AuthService, User } from '../../../../Services/auth.service';
 
 @Component({
   selector: 'app-navbar',
+  imports: [RouterModule],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css'],
 })

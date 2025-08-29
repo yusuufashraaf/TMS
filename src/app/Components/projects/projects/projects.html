@@ -1,0 +1,201 @@
+<div class="projects-overview">
+    <h1 class="page-title">Projects Overview</h1>
+
+    <!-- Search and Filter Bar -->
+    <div class="filter-bar">
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search projects or tasks..." [(ngModel)]="searchTerm">
+        </div>
+
+        <div class="filters">
+            <select class="filter-select" [(ngModel)]="selectedStatus">
+                <option value="All Statuses">All Statuses</option>
+                @for (status of statusOptions; track $index) {
+                <option [value]="status">{{ status }}</option>
+                }
+            </select>
+
+            <select class="filter-select" [(ngModel)]="selectedPriority">
+                <option value="All Priorities">All Priorities</option>
+                @for (priority of priorityOptions; track $index) {
+                <option [value]="priority">{{ priority }}</option>
+                }
+            </select>
+
+            <button class="create-btn" (click)="openCreateProjectModal()">
+                + Create New Project
+            </button>
+        </div>
+    </div>
+
+    <!-- Projects List -->
+    <div class="projects-container">
+        @for (project of filteredProjects; track $index) {
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-info">
+                    <h3 class="project-title">{{ project.name }}</h3>
+                    <p class="project-due-date">Due: {{ project.createdAt }}</p>
+                    <p class="project-description">{{ project.description }}</p>
+                </div>
+
+                <div class="project-actions">
+                    <button class="action-btn edit-btn" (click)="openEditProjectModal(project)">
+                        Edit
+                    </button>
+                    <button class="action-btn delete-btn" (click)="deleteProject(project._id!)">
+                        Delete
+                    </button>
+                </div>
+
+                <div class="task-count">
+                    {{ project.completedTasks || 0 }}/{{ project.totalTasks }} Tasks
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="project.progress"></div>
+                </div>
+                <span class="progress-text">{{ project.progress }}%</span>
+            </div>
+
+
+            <!-- Tasks Section -->
+            <div class="tasks-section">
+                <div class="tasks-header">
+                    <h4>View Tasks ({{ project.tasks?.length }})</h4>
+                    <button class="action-btn create-task-btn" (click)="openCreateTaskModal(project._id!)">
+                        + Add Task
+                    </button>
+                </div>
+
+                <div class="tasks-list">
+                    @for (task of project.tasks; track $index) {
+                    <div class="task-item">
+                        <div class="task-content">
+                            <h5 class="task-name">{{ task.name }}</h5>
+                            <p class="task-description">{{ task.description }}</p>
+                            <div class="task-meta">
+                                <span class="task-status status-{{ task.status.toLowerCase().replace(' ', '-') }}">
+                                    {{ task.status }}
+                                </span>
+                                <span class="task-priority priority-{{ task.priority.toLowerCase() }}">
+                                    {{ task.priority }}
+                                </span>
+                                <span class="task-assignee">{{ task.assignedUser }}</span>
+                            </div>
+                        </div>
+                        <div class="task-actions">
+                            <button class="action-btn edit-btn" (click)="openEditTaskModal(project._id!, task)">
+                                Edit
+                            </button>
+                            <button class="action-btn delete-btn" (click)="deleteTask(project._id!, task.id)">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+
+    <!-- Project Modal -->
+    @if (showProjectModal) {
+    <div class="modal-overlay" (click)="closeProjectModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h3>{{ isEditMode ? 'Edit Project' : 'Create New Project' }}</h3>
+                <button class="close-btn" (click)="closeProjectModal()">&times;</button>
+            </div>
+
+            <form class="modal-form" (ngSubmit)="saveProject()">
+                <div class="form-group">
+                    <label for="projectName">Project Name</label>
+                    <input type="text" id="projectName" class="form-input" [(ngModel)]="projectForm.name"
+                        name="projectName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectDescription">Description</label>
+                    <textarea id="projectDescription" class="form-textarea" [(ngModel)]="projectForm.description"
+                        name="projectDescription" rows="3" required></textarea>
+                </div>
+
+
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" (click)="closeProjectModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        {{ isEditMode ? 'Update Project' : 'Create Project' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    }
+    <!-- Task Modal -->
+    @if (showTaskModal) {
+    <div class="modal-overlay" (click)="closeTaskModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h3>{{ isEditMode ? 'Edit Task' : 'Create New Task' }}</h3>
+                <button class="close-btn" (click)="closeTaskModal()">&times;</button>
+            </div>
+
+            <form class="modal-form" (ngSubmit)="saveTask()">
+                <div class="form-group">
+                    <label for="taskName">Task Name</label>
+                    <input type="text" id="taskName" class="form-input" [(ngModel)]="taskForm.name" name="taskName"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="taskDescription">Description</label>
+                    <textarea id="taskDescription" class="form-textarea" [(ngModel)]="taskForm.description"
+                        name="taskDescription" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="taskStatus">Status</label>
+                    <select id="taskStatus" class="form-select" [(ngModel)]="taskForm.status" name="taskStatus"
+                        required>
+                        <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="taskPriority">Priority</label>
+                    <select id="taskPriority" class="form-select" [(ngModel)]="taskForm.priority" name="taskPriority"
+                        required>
+                        <option *ngFor="let priority of priorityOptions" [value]="priority">{{ priority }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="taskAssignee">Assigned User</label>
+                    <select id="taskAssignee" class="form-select" [(ngModel)]="taskForm.assignedUser"
+                        name="taskAssignee" required>
+                        <option value="">Select a user</option>
+                        <option *ngFor="let user of userOptions" [value]="user">{{ user }}</option>
+                    </select>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" (click)="closeTaskModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        {{ isEditMode ? 'Update Task' : 'Create Task' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    }
+</div>
