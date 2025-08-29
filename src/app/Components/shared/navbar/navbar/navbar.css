@@ -150,7 +150,7 @@
 }
 
 .mobile-overlay {
-  display: none;
+  display: block; /* keep block so it can animate */
   position: fixed;
   top: 0;
   left: 0;
@@ -159,11 +159,13 @@
   background: rgba(0, 0, 0, 0.5);
   z-index: 999;
   opacity: 0;
+  pointer-events: none; /* <<< ADD THIS */
   transition: opacity 0.3s ease;
 }
 
 .mobile-overlay.show {
   opacity: 1;
+  pointer-events: auto; /* <<< ENABLE clicks only when visible */
 }
 
 /* Responsive Design */

@@ -1,0 +1,392 @@
+.signup-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    sans-serif;
+}
+
+.signup-card {
+  background: #2a2a3e;
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid #3a3a4e;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.title {
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  color: #a0a0b0;
+  font-size: 16px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  color: #a0a0b0;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.input {
+  background: #1a1a2e;
+  border: 2px solid #3a3a4e;
+  border-radius: 12px;
+  padding: 16px;
+  color: #ffffff;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.input:focus {
+  border-color: #4f6ef7;
+  box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.1);
+}
+
+.input.error {
+  border-color: #ff4757;
+}
+
+.input::placeholder {
+  color: #6a6a7a;
+}
+
+.password-input {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #a0a0b0;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.2s ease;
+}
+
+.toggle-password:hover {
+  color: #ffffff;
+}
+
+.radio-group {
+  display: flex;
+  gap: 24px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #a0a0b0;
+  font-size: 16px;
+  gap: 8px;
+}
+
+.radio-input {
+  display: none;
+}
+
+.radio-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #3a3a4e;
+  border-radius: 50%;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.radio-input:checked + .radio-custom {
+  border-color: #4f6ef7;
+}
+
+.radio-input:checked + .radio-custom::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background: #4f6ef7;
+  border-radius: 50%;
+}
+
+.radio-text {
+  color: #ffffff;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  gap: 12px;
+  line-height: 1.5;
+}
+
+.checkbox-input {
+  display: none;
+}
+
+.checkbox-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #3a3a4e;
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.checkbox-input:checked + .checkbox-custom {
+  background: #4f6ef7;
+  border-color: #4f6ef7;
+}
+
+.checkbox-input:checked + .checkbox-custom::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-text {
+  color: #a0a0b0;
+  font-size: 14px;
+}
+
+.link {
+  color: #4f6ef7;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: #6b7eff;
+  text-decoration: underline;
+}
+
+.submit-button {
+  background: #4f6ef7;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: #3d5af1;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(79, 110, 247, 0.3);
+}
+
+.submit-button:disabled {
+  background: #3a3a4e;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.footer {
+  margin-top: 32px;
+  text-align: center;
+  z-index: 1200;
+}
+
+.link {
+  display: inline-block;
+  padding: 8px 12px;
+}
+
+.link,
+.link-button {
+  /* Ensure minimum 44px touch target (iOS guideline) */
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+
+  /* Remove button styling if using button element */
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+
+  /* Improve tap response */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  touch-action: manipulation;
+}
+
+.link:hover,
+.link-button:hover {
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+.link:active,
+.link-button:active {
+  opacity: 0.6;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .login-text {
+    text-align: center;
+    padding: 16px 0;
+  }
+
+  .link,
+  .link-button {
+    font-size: 16px; /* Prevent zoom on iOS */
+    padding: 12px 16px;
+  }
+}
+
+.login-text {
+  color: #a0a0b0;
+  margin: 0 0 16px 0;
+  font-size: 16px;
+}
+
+.auth-note {
+  color: #6a6a7a;
+  font-size: 12px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.made-with {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #3a3a4e;
+  color: #6a6a7a;
+  font-size: 12px;
+}
+
+.brand {
+  color: #4f6ef7;
+  font-weight: 600;
+}
+
+.error-message {
+  color: #ff4757;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+@media (max-width: 480px) {
+  .signup-card {
+    padding: 24px;
+    margin: 16px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .radio-group {
+    gap: 16px;
+  }
+}
+
+/* Toast notification styles (replace the modal notification styles) */
+
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #fff;
+  z-index: 1100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.toast-notification.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.toast-notification.error {
+  background: #f56565;
+}
+
+.toast-notification.success {
+  background: #48bb78;
+}
