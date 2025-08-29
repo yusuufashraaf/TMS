@@ -2,27 +2,37 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, tap } from 'rxjs';
-// Export the interface so it can be imported elsewhere
+
 export interface User {
   id: string;
   name: string;
   email: string;
   role: 'Admin' | 'User';
 }
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private tokenCheckInterval!: number;
   private baseUrl = 'http://localhost:8000/api/v1/auth';
   public currentUser = new BehaviorSubject<User | null>(null);
 
   constructor(private http: HttpClient, private router: Router) {
-    // Check token on app load
+    // Initialize current user if token exists
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
     if (token && user) {
       this.currentUser.next(JSON.parse(user));
     }
+
+    // Check token periodically
+    this.tokenCheckInterval = window.setInterval(() => {
+      const tokenExists = !!localStorage.getItem('token');
+      if (!tokenExists && this.currentUser.value) {
+        this.handleTokenRemoved();
+      }
+    }, 1000);
   }
 
   register(data: any) {
@@ -43,6 +53,7 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     this.currentUser.next(null);
+    clearInterval(this.tokenCheckInterval);
     this.router.navigate(['/login']);
   }
 
@@ -53,5 +64,10 @@ export class AuthService {
   isAdmin(): boolean {
     const user = this.currentUser.value;
     return user?.role === 'Admin';
+  }
+
+  private handleTokenRemoved() {
+    this.currentUser.next(null);
+    this.router.navigate(['/login']);
   }
 }
