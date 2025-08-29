@@ -2,13 +2,14 @@
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Observable } from 'rxjs';
+import { environment } from '../../environment/environment.prod';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
   private socket: Socket;
 
   constructor() {
-    this.socket = io('http://localhost:8000'); // backend URL
+    this.socket = io(environment.socketUrl);
   }
 
   joinUserRoom(userId: string) {
