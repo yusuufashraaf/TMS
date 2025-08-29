@@ -4,7 +4,7 @@
     <!-- Search and Filter Bar -->
     <div class="filter-bar">
         <div class="search-container">
-            <input type="text" class="search-input" placeholder="Search projects or tasks..." [(ngModel)]="searchTerm">
+            <input type="text" class="search-input" placeholder="Search projects..." [(ngModel)]="searchTerm">
         </div>
 
         <div class="filters">
@@ -28,75 +28,82 @@
         </div>
     </div>
 
+    <!-- Project Error -->
+    @if (projectError) {
+    <div class="error-message">{{ projectError }}</div>
+    }
+
+    <!-- Task Error -->
+    @if (taskError) {
+    <div class="error-message">{{ taskError }}</div>
+    }
     <!-- Projects List -->
     <div class="projects-container">
         @for (project of filteredProjects; track $index) {
-        <div class="project-card">
-            <div class="project-header">
-                <div class="project-info">
-                    <h3 class="project-title">{{ project.name }}</h3>
-                    <p class="project-due-date">Due: {{ project.createdAt }}</p>
-                    <p class="project-description">{{ project.description }}</p>
+        <div>
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-info">
+                        <h3 class="project-title">{{ project.name }}</h3>
+                        <p class="project-due-date">Due: {{ project.createdAt | date:'shortDate' }}</p>
+                        <p class="project-description">{{ project.description }}</p>
+                    </div>
+
+                    <div class="project-actions">
+                        <button class="action-btn edit-btn" (click)="openEditProjectModal(project)">Edit</button>
+                        <button class="action-btn delete-btn" (click)="deleteProject(project._id!)">Delete</button>
+                    </div>
+
+                    <div class="task-count">
+                        {{ project.completedTasks || 0 }}/{{ project.totalTasks }} Tasks
+                    </div>
                 </div>
 
-                <div class="project-actions">
-                    <button class="action-btn edit-btn" (click)="openEditProjectModal(project)">
-                        Edit
-                    </button>
-                    <button class="action-btn delete-btn" (click)="deleteProject(project._id!)">
-                        Delete
-                    </button>
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" [style.width.%]="project.progress"></div>
+                    </div>
+                    <span class="progress-text">{{ project.progress }}%</span>
                 </div>
 
-                <div class="task-count">
-                    {{ project.completedTasks || 0 }}/{{ project.totalTasks }} Tasks
-                </div>
-            </div>
+                <!-- Tasks Section -->
+                <div class="tasks-section">
+                    <div class="tasks-header">
+                        <h4>View Tasks ({{ project.tasks?.length }})</h4>
+                        <button class="action-btn create-task-btn" (click)="openCreateTaskModal(project._id!)">
+                            + Add Task
+                        </button>
+                    </div>
 
-            <!-- Progress Bar -->
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" [style.width.%]="project.progress"></div>
-                </div>
-                <span class="progress-text">{{ project.progress }}%</span>
-            </div>
-
-
-            <!-- Tasks Section -->
-            <div class="tasks-section">
-                <div class="tasks-header">
-                    <h4>View Tasks ({{ project.tasks?.length }})</h4>
-                    <button class="action-btn create-task-btn" (click)="openCreateTaskModal(project._id!)">
-                        + Add Task
-                    </button>
-                </div>
-
-                <div class="tasks-list">
-                    @for (task of project.tasks; track $index) {
-                    <div class="task-item">
-                        <div class="task-content">
-                            <h5 class="task-name">{{ task.name }}</h5>
-                            <p class="task-description">{{ task.description }}</p>
-                            <div class="task-meta">
-                                <span class="task-status status-{{ task.status.toLowerCase().replace(' ', '-') }}">
-                                    {{ task.status }}
-                                </span>
-                                <span class="task-priority priority-{{ task.priority.toLowerCase() }}">
-                                    {{ task.priority }}
-                                </span>
-                                <span class="task-assignee">{{ task.assignedUser }}</span>
+                    <div class="tasks-list">
+                        @for (task of project.tasks; track $index) {
+                        <div>
+                            <div class="task-item">
+                                <div class="task-content">
+                                    <h5 class="task-name">{{ task.title }}</h5>
+                                    <p class="task-description">{{ task.description }}</p>
+                                    <div class="task-meta">
+                                        <span
+                                            class="task-status status-{{ task.status.toLowerCase().replace(' ', '-') }}">
+                                            {{ task.status }}
+                                        </span>
+                                        <span class="task-priority priority-{{ task.priority.toLowerCase() }}">
+                                            {{ task.priority }}
+                                        </span>
+                                        <span class="task-due-date">Due: {{ task['deadline'] | date:'shortDate'
+                                            }}</span>
+                                    </div>
+                                </div>
+                                <div class="task-actions">
+                                    <button class="action-btn edit-btn"
+                                        (click)="openEditTaskModal(project._id!, task)">Edit</button>
+                                    <button class="action-btn delete-btn" (click)="deleteTask(task._id)">Delete</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="task-actions">
-                            <button class="action-btn edit-btn" (click)="openEditTaskModal(project._id!, task)">
-                                Edit
-                            </button>
-                            <button class="action-btn delete-btn" (click)="deleteTask(project._id!, task.id)">
-                                Delete
-                            </button>
-                        </div>
+                        }
                     </div>
-                    }
                 </div>
             </div>
         </div>
@@ -114,24 +121,47 @@
 
             <form class="modal-form" (ngSubmit)="saveProject()">
                 <div class="form-group">
-                    <label for="projectName">Project Name</label>
-                    <input type="text" id="projectName" class="form-input" [(ngModel)]="projectForm.name"
-                        name="projectName" required>
+                    <label for="projectName">Project Name *</label>
+                    <input type="text" id="projectName" class="form-input" [class.error]="validateProjectField('name')"
+                        [(ngModel)]="projectForm.name" name="projectName" (blur)="onProjectFieldBlur('name')"
+                        (input)="onProjectFieldInput('name')" required>
+                    <!-- Client-side validation error -->
+                    @if (validateProjectField('name')) {
+                    <div class="error-message">
+                        {{ validateProjectField('name') }}
+                    </div>
+                    }
+                    <!-- Server-side validation error -->
+                    @if (!validateProjectField('name') && projectFormErrors['name']) {
+                    <div class="error-message">
+                        {{ projectFormErrors['name'] }}
+                    </div>
+                    }
                 </div>
 
                 <div class="form-group">
-                    <label for="projectDescription">Description</label>
-                    <textarea id="projectDescription" class="form-textarea" [(ngModel)]="projectForm.description"
-                        name="projectDescription" rows="3" required></textarea>
+                    <label for="projectDescription">Description *</label>
+                    <textarea id="projectDescription" class="form-textarea"
+                        [class.error]="validateProjectField('description')" [(ngModel)]="projectForm.description"
+                        name="projectDescription" rows="3" (blur)="onProjectFieldBlur('description')"
+                        (input)="onProjectFieldInput('description')" required></textarea>
+                    <!-- Client-side validation error -->
+                    @if (validateProjectField('description')) {
+                    <div class="error-message">
+                        {{ validateProjectField('description') }}
+                    </div>
+                    }
+                    <!-- Server-side validation error -->
+                    @if (!validateProjectField('description') && projectFormErrors['description']) {
+                    <div class="error-message">
+                        {{ projectFormErrors['description'] }}
+                    </div>
+                    }
                 </div>
 
-
-
                 <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" (click)="closeProjectModal()">
-                        Cancel
-                    </button>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="button" class="btn btn-secondary" (click)="closeProjectModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!isProjectFormValid()">
                         {{ isEditMode ? 'Update Project' : 'Create Project' }}
                     </button>
                 </div>
@@ -139,6 +169,7 @@
         </div>
     </div>
     }
+
     <!-- Task Modal -->
     @if (showTaskModal) {
     <div class="modal-overlay" (click)="closeTaskModal()">
@@ -150,47 +181,135 @@
 
             <form class="modal-form" (ngSubmit)="saveTask()">
                 <div class="form-group">
-                    <label for="taskName">Task Name</label>
-                    <input type="text" id="taskName" class="form-input" [(ngModel)]="taskForm.name" name="taskName"
-                        required>
+                    <label for="taskName">Task Name *</label>
+                    <input type="text" id="taskName" class="form-input" [class.error]="validateTaskField('title')"
+                        [(ngModel)]="taskForm.title" name="taskName" (blur)="onTaskFieldBlur('title')"
+                        (input)="onTaskFieldInput('title')" required>
+                    <!-- Client-side validation error -->
+                    @if (validateTaskField('title')) {
+                    <div class="error-message">
+                        {{ validateTaskField('title') }}
+                    </div>
+                    }
+                    <!-- Server-side validation error -->
+                    @if (!validateTaskField('title') && taskFormErrors['title']) {
+                    <div class="error-message">
+                        {{ taskFormErrors['title'] }}
+                    </div>
+                    }
                 </div>
 
                 <div class="form-group">
-                    <label for="taskDescription">Description</label>
-                    <textarea id="taskDescription" class="form-textarea" [(ngModel)]="taskForm.description"
-                        name="taskDescription" rows="3" required></textarea>
+                    <label for="taskDescription">Description *</label>
+                    <textarea id="taskDescription" class="form-textarea"
+                        [class.error]="validateTaskField('description')" [(ngModel)]="taskForm.description"
+                        name="taskDescription" rows="3" (blur)="onTaskFieldBlur('description')"
+                        (input)="onTaskFieldInput('description')" required></textarea>
+                    <!-- Client-side validation error -->
+                    @if (validateTaskField('description')) {
+                    <div class="error-message">
+                        {{ validateTaskField('description') }}
+                    </div>
+                    }
+                    <!-- Server-side validation error -->
+                    @if (!validateTaskField('description') && taskFormErrors['description']) {
+                    <div class="error-message">
+                        {{ taskFormErrors['description'] }}
+                    </div>
+                    }
                 </div>
 
                 <div class="form-group">
-                    <label for="taskStatus">Status</label>
-                    <select id="taskStatus" class="form-select" [(ngModel)]="taskForm.status" name="taskStatus"
-                        required>
-                        <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
+                    <label for="taskStatus">Status *</label>
+                    <select id="taskStatus" class="form-select" [class.error]="validateTaskField('status')"
+                        [(ngModel)]="taskForm.status" name="taskStatus" (blur)="onTaskFieldBlur('status')"
+                        (change)="onTaskFieldInput('status')" required>
+                        <option value="">Select status</option>
+                        @for (status of statusOptions; track $index) {
+                        <option [value]="status">{{ status }}</option>}
                     </select>
+                    <!-- Client-side validation error -->
+                    @if (validateTaskField('status')) {
+                    <div class="error-message">
+                        {{ validateTaskField('status') }}
+                    </div>
+                    }
+                    <!-- Server-side validation error -->
+                    @if (!validateTaskField('status') && taskFormErrors['status']) {
+                    <div class="error-message">
+                        {{ taskFormErrors['status'] }}
+                    </div>
+                    }
                 </div>
 
                 <div class="form-group">
-                    <label for="taskPriority">Priority</label>
-                    <select id="taskPriority" class="form-select" [(ngModel)]="taskForm.priority" name="taskPriority"
-                        required>
-                        <option *ngFor="let priority of priorityOptions" [value]="priority">{{ priority }}</option>
+                    <label for="taskPriority">Priority *</label>
+                    <select id="taskPriority" class="form-select" [class.error]="validateTaskField('priority')"
+                        [(ngModel)]="taskForm.priority" name="taskPriority" (blur)="onTaskFieldBlur('priority')"
+                        (change)="onTaskFieldInput('priority')" required>
+                        <option value="">Select priority</option>
+                        @for (priority of priorityOptions; track $index) {
+                        <option [value]="priority">{{ priority }}</option>}
                     </select>
+                    <!-- Client-side validation error -->
+                    @if (validateTaskField('priority')) {
+                    <div class="error-message">
+                        {{ validateTaskField('priority') }}
+                    </div>
+                    }
+                    <!-- Server-side validation error -->
+                    @if (!validateTaskField('priority') && taskFormErrors['priority']) {
+                    <div class="error-message">
+                        {{ taskFormErrors['priority'] }}
+                    </div>
+                    }
                 </div>
 
                 <div class="form-group">
-                    <label for="taskAssignee">Assigned User</label>
-                    <select id="taskAssignee" class="form-select" [(ngModel)]="taskForm.assignedUser"
-                        name="taskAssignee" required>
+                    <label for="taskAssignee">Assigned User *</label>
+                    <select id="taskAssignee" class="form-select" [class.error]="validateTaskField('assignedTo')"
+                        [(ngModel)]="taskForm.assignedTo" name="taskAssignee" (blur)="onTaskFieldBlur('assignedTo')"
+                        (change)="onTaskFieldInput('assignedTo')" required>
                         <option value="">Select a user</option>
-                        <option *ngFor="let user of userOptions" [value]="user">{{ user }}</option>
+                        @for (user of userOptions; track $index) {
+                        <option [ngValue]="user._id">{{ user.name }}</option>}
                     </select>
+                    <!-- Client-side validation error -->
+                    @if (validateTaskField('assignedTo')) {
+                    <div class="error-message">
+                        {{ validateTaskField('assignedTo') }}
+                    </div>
+                    }
+                    <!-- Server-side validation error -->
+                    @if (!validateTaskField('assignedTo') && taskFormErrors['assignedTo']) {
+                    <div class="error-message">
+                        {{ taskFormErrors['assignedTo'] }}
+                    </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label for="taskDueDate">Due Date</label>
+                    <input type="date" id="taskDueDate" class="form-input" [class.error]="validateTaskField('deadline')"
+                        [(ngModel)]="taskForm.deadline" name="taskDueDate" (blur)="onTaskFieldBlur('deadline')"
+                        (input)="onTaskFieldInput('deadline')">
+                    <!-- Client-side validation error -->
+                    @if (validateTaskField('deadline')) {
+                    <div class="error-message">
+                        {{ validateTaskField('deadline') }}
+                    </div>
+                    }
+                    <!-- Server-side validation error -->
+                    @if (!validateTaskField('deadline') && taskFormErrors['deadline']) {
+                    <div class="error-message">
+                        {{ taskFormErrors['deadline'] }}
+                    </div>
+                    }
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" (click)="closeTaskModal()">
-                        Cancel
-                    </button>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="button" class="btn btn-secondary" (click)="closeTaskModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!isTaskFormValid()">
                         {{ isEditMode ? 'Update Task' : 'Create Task' }}
                     </button>
                 </div>

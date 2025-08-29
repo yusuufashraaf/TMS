@@ -573,3 +573,185 @@
     align-self: flex-end;
   }
 }
+
+/* Error message styles - matching your dark theme */
+.error-message {
+  color: #fc8181;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  display: block;
+  line-height: 1.4;
+  animation: fadeInError 0.3s ease-in;
+}
+
+/* Form input error states - matching your existing form styles */
+.form-input.error,
+.form-textarea.error,
+.form-select.error {
+  border-color: #fc8181 !important;
+  background: rgba(252, 129, 129, 0.1);
+  box-shadow: 0 0 0 2px rgba(252, 129, 129, 0.2);
+}
+
+.form-input.error:focus,
+.form-textarea.error:focus,
+.form-select.error:focus {
+  border-color: #fc8181 !important;
+  box-shadow: 0 0 0 2px rgba(252, 129, 129, 0.3);
+}
+
+/* Enhanced form group spacing to match your existing styles */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* Updated label styles to match your theme and show required fields */
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #e2e8f0;
+  margin-bottom: 0.5rem;
+}
+
+/* Required field indicator */
+.form-group label::after {
+  content: " *";
+  color: #fc8181;
+  font-weight: bold;
+}
+
+/* Remove asterisk from optional fields (you can add .optional class) */
+.form-group.optional label::after {
+  content: "";
+}
+
+/* Button disabled state matching your theme */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  background: #4a5568 !important;
+  color: #718096 !important;
+}
+
+/* Enhanced focus states to match your existing blue theme */
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+}
+
+/* Valid input state (optional) - using your green color */
+.form-input.valid,
+.form-textarea.valid,
+.form-select.valid {
+  border-color: #68d391;
+  background: rgba(104, 211, 145, 0.1);
+}
+
+.form-input.valid:focus,
+.form-textarea.valid:focus,
+.form-select.valid:focus {
+  border-color: #68d391;
+  box-shadow: 0 0 0 2px rgba(104, 211, 145, 0.2);
+}
+
+/* Enhanced error message animation */
+@keyframes fadeInError {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Success message styles (if you want to add success feedback) */
+.success-message {
+  color: #68d391;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  display: block;
+  line-height: 1.4;
+  animation: fadeInError 0.3s ease-in;
+}
+
+/* Form field wrapper for better spacing */
+.form-field-wrapper {
+  position: relative;
+}
+
+/* Loading state for form submission */
+.btn.loading {
+  position: relative;
+  color: transparent !important;
+}
+
+.btn.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  color: #ffffff;
+}
+
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Enhanced responsive design for validation */
+@media (max-width: 768px) {
+  .error-message {
+    font-size: 0.75rem;
+    margin-top: 0.4rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  /* Stack form actions vertically on mobile */
+  .modal-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .error-message {
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
+
+  .form-group label {
+    font-size: 0.85rem;
+  }
+}
