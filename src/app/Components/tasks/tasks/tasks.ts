@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { TaskService, Task, TaskStatus } from '../../../Services/task.service';
 import { AuthService } from '../../../Services/auth.service';
+import { NotificationService } from '../../../Services/notification.service';
 
 interface Filters {
   status: string;
@@ -42,13 +43,31 @@ export class Tasks implements OnInit, OnDestroy {
 
   constructor(
     private taskService: TaskService,
-    private authService: AuthService
+    private authService: AuthService,
+    private notificationService: NotificationService
   ) {
     this.currentUserName = this.authService.currentUser.value?.name || '';
   }
 
   ngOnInit(): void {
     this.loadTasks();
+
+    // --- Join Socket.IO room for current user ---
+    const userId = this.authService.currentUser.value?.id;
+    if (userId) {
+      this.notificationService.joinUserRoom(userId);
+
+      this.notificationService
+        .onNewTask()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data) => {
+          // Show toast notification
+          this.showNotification(data.message, 'success');
+
+          // Reload tasks automatically
+          this.loadTasks();
+        });
+    }
   }
 
   ngOnDestroy(): void {
