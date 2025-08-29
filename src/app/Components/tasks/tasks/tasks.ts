@@ -244,4 +244,10 @@ export class Tasks implements OnInit, OnDestroy {
   getAssignedUserName(task: Task) {
     return task.assignedTo || 'Unassigned';
   }
+
+  onSortChange(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    const direction = select.value as 'asc' | 'desc';
+    this.sortTasks('deadline', direction);
+  }
 }
