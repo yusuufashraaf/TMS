@@ -1,6 +1,9 @@
 <div class="projects-overview">
     <h1 class="page-title">Projects Overview</h1>
-
+    <div class="toast-notification" [class.show]="notification.show" [class.success]="notification.type === 'success'"
+        [class.error]="notification.type === 'error'">
+        {{ notification.message }}
+    </div>
     <!-- Search and Filter Bar -->
     <div class="filter-bar">
         <div class="search-container">
@@ -52,6 +55,10 @@
                     <div class="project-actions">
                         <button class="action-btn edit-btn" (click)="openEditProjectModal(project)">Edit</button>
                         <button class="action-btn delete-btn" (click)="deleteProject(project._id!)">Delete</button>
+                        <button class="action-btn secondary-btn" (click)="downloadProjectPDF(project._id!)">
+                            📄 PDF
+                        </button>
+
                     </div>
 
                     <div class="task-count">
