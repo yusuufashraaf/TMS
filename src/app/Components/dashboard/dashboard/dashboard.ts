@@ -96,7 +96,7 @@ export class Dashboard implements OnInit {
   }
 
   trackByTaskId(index: number, task: Task): string {
-    return task._id;
+    return task._id!;
   }
 
   refreshDashboard(): void {
