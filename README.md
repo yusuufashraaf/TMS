@@ -2,7 +2,7 @@
 
 ## 🌟 Overview
 
-**TMS** is a full-stack **Task Management System** designed for teams to efficiently manage tasks, track progress, and collaborate. The frontend is built with Angular, while the backend uses Node.js + Express with a MongoDB or MySQL database. It features secure authentication, real-time notifications, and comprehensive task/project management tools.
+**TMS** is a full-stack **Task Management System** designed for teams to efficiently manage tasks, track progress, and collaborate. The frontend is built with Angular, while the backend uses Node.js + Express with a MongoDB database. It features secure authentication, real-time notifications, and comprehensive task/project management tools.
 
 ## 🚀 Core Features
 
@@ -37,65 +37,57 @@
 
 ## 📁 Project Structure
 
-\`\`\`bash
+```text
 app/
-│ app.config.ts
-│ app.css
-│ app.html
-│ app.routes.ts
-│ app.spec.ts
-│ app.ts
-│
+├── app.config.ts
+├── app.css
+├── app.html
+├── app.routes.ts
+├── app.spec.ts
+├── app.ts
 ├── Components/
-│ ├── auth/
-│ │ ├── login/
-│ │ │ login.css
-│ │ │ login.html
-│ │ │ login.ts
-│ │ └── register/
-│ │ register.css
-│ │ register.html
-│ │ register.ts
-│ │
-│ ├── dashboard/
-│ │ └── dashboard/
-│ │ dashboard.css
-│ │ dashboard.html
-│ │ dashboard.ts
-│ │
-│ ├── projects/
-│ │ └── projects/
-│ │ projects.css
-│ │ projects.html
-│ │ projects.ts
-│ │
-│ ├── tasks/
-│ │ └── tasks/
-│ │ tasks.css
-│ │ tasks.html
-│ │ tasks.ts
-│ │
-│ └── shared/
-│ └── navbar/
-│ └── navbar/
-│ navbar.css
-│ navbar.html
-│ navbar.ts
-│
+│   ├── auth/
+│   │   ├── login/
+│   │   │   ├── login.css
+│   │   │   ├── login.html
+│   │   │   └── login.ts
+│   │   └── register/
+│   │       ├── register.css
+│   │       ├── register.html
+│   │       └── register.ts
+│   ├── dashboard/
+│   │   └── dashboard/
+│   │       ├── dashboard.css
+│   │       ├── dashboard.html
+│   │       └── dashboard.ts
+│   ├── projects/
+│   │   └── projects/
+│   │       ├── projects.css
+│   │       ├── projects.html
+│   │       └── projects.ts
+│   ├── tasks/
+│   │   └── tasks/
+│   │       ├── tasks.css
+│   │       ├── tasks.html
+│   │       └── tasks.ts
+│   └── shared/
+│       └── navbar/
+│           └── navbar/
+│               ├── navbar.css
+│               ├── navbar.html
+│               └── navbar.ts
 ├── Guards/
-│ auth-guard-guard.ts
-│ login-guard-guard.ts
-│
+│   ├── auth-guard-guard.ts
+│   └── login-guard-guard.ts
 ├── interceptors/
-│ auth-interceptor.ts
-│
+│   └── auth-interceptor.ts
 └── Services/
-auth.service.ts
-notification.service.ts
-pdf.service.ts
-project.service.ts
-task.service.ts
-\`\`\`
+    ├── auth.service.ts
+    ├── notification.service.ts
+    ├── pdf.service.ts
+    ├── project.service.ts
+    └── task.service.ts
+```
 
 ## 🛠️ Setup & Installation
 
@@ -109,22 +101,22 @@ task.service.ts
 
 ### Installation Steps
 
-\`\`\`bash
+```bash
 git clone https://github.com/your-username/TMS.git
 cd TMS
 npm install
-\`\`\`
+```
 
 ### Environment Configuration
 
-Update \`src/environments/environment.ts\`:
+Update `src/environments/environment.ts`:
 
-\`\`\`ts
+```ts
 export const environment = {
-production: false,
-apiBase: 'http://localhost:8000/api/v1/(route)',
+  production: false,
+  apiBase: "http://localhost:8000/api/v1/(route)",
 };
-\`\`\`
+```
 
 ## 🔐 Security Features
 
@@ -146,48 +138,45 @@ apiBase: 'http://localhost:8000/api/v1/(route)',
 
 ## 🛠️ Developer Commands
 
-| Command                           | Description                    |
-| --------------------------------- | ------------------------------ |
-| \`ng serve\`                      | Start local Angular dev server |
-| \`npm run dev\`                   | Start backend Node.js server   |
-| \`ng build --configuration prod\` | Build frontend for production  |
-| \`ng test\`                       | Run frontend tests             |
-| \`ng lint\`                       | Run code linter                |
+| Command                         | Description                    |
+| ------------------------------- | ------------------------------ |
+| `ng serve`                      | Start local Angular dev server |
+| `npm run dev`                   | Start backend Node.js server   |
+| `ng build --configuration prod` | Build frontend for production  |
+| `ng test`                       | Run frontend tests             |
+| `ng lint`                       | Run code linter                |
 
 ## 🌍 Deployment
 
 ### Production Environment
 
-Update \`environment.prod.ts\`:
+Update `environment.prod.ts`:
 
-\`\`\`ts
+```ts
 export const environment = {
-production: true,
-apiBase: 'https://your-api.com/api',
+  production: true,
+  apiBase: "https://your-api.com/api",
 };
-\`\`\`
+```
 
 ### Build
 
-\`\`\`bash
-
+```bash
 # Frontend
-
 ng build --configuration production
 
 # Backend
-
 npm run start
-\`\`\`
+```
 
 ## 🤝 Contributing
 
-| Step                  | Example Command                           |
-| --------------------- | ----------------------------------------- |
-| Create Feature Branch | \`git checkout -b feature/your-feature\`  |
-| Commit Changes        | \`git commit -m "feat: add new feature"\` |
-| Push to GitHub        | \`git push origin feature/your-feature\`  |
-| Open Pull Request     | On GitHub                                 |
+| Step                  | Example Command                         |
+| --------------------- | --------------------------------------- |
+| Create Feature Branch | `git checkout -b feature/your-feature`  |
+| Commit Changes        | `git commit -m "feat: add new feature"` |
+| Push to GitHub        | `git push origin feature/your-feature`  |
+| Open Pull Request     | On GitHub                               |
 
 ### Best Practices
 
