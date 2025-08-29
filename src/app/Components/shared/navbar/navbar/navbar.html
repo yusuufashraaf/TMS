@@ -1,14 +1,16 @@
 <!-- Only show navbar if logged in -->
-@if (isAdmin) {
+@if (isLoggedIn) {
 <nav class="navbar">
     <div class="navbar-container">
 
         <!-- Navigation Menu -->
         <div class="navbar-nav" [class.show]="isMobileMenuOpen">
+            @if (isAdmin) {
             <a class="nav-link" [class.active]="activeRoute === 'dashboard'" (click)="setActiveRoute('dashboard')"
                 routerLink="/dashboard">
                 Dashboard
             </a>
+            }
             @if (isAdmin) {
             <a class="nav-link" [class.active]="activeRoute === 'projects'" (click)="setActiveRoute('projects')"
                 routerLink="/projects">
@@ -18,10 +20,6 @@
             <a class="nav-link" [class.active]="activeRoute === 'tasks'" (click)="setActiveRoute('tasks')"
                 routerLink="/tasks">
                 Tasks
-            </a>
-            <a class="nav-link" [class.active]="activeRoute === 'notifications'"
-                (click)="setActiveRoute('notifications')" routerLink="/notifications">
-                Notifications
             </a>
             @if(isAdmin){
             <a class="nav-link" [class.active]="activeRoute === 'reports'" (click)="setActiveRoute('reports')"

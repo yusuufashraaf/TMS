@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+export type TaskStatus = 'Pending' | 'In Progress' | 'Completed';
+
 export interface Task {
   _id?: string;
   title: string;
@@ -30,12 +32,11 @@ export interface TaskStats {
 })
 export class TaskService {
   users: any[] = [];
-
   private baseUrl = 'http://localhost:8000/api/v1/tasks';
 
   constructor(private http: HttpClient) {}
 
-  /** Fetch all tasks with optional filters (status, priority, projectId, etc.) */
+  /** Fetch all tasks */
   getAllTasks(paramsObj?: any): Observable<{ tasks: Task[]; total: number }> {
     let params = new HttpParams();
     if (paramsObj) {
@@ -47,6 +48,25 @@ export class TaskService {
     }
 
     return this.http.get<any>(`${this.baseUrl}`, { params }).pipe(
+      map((res) => ({
+        tasks: res.data,
+        total: res.total,
+      }))
+    );
+  }
+
+  /** Fetch tasks assigned to the logged-in user */
+  getMyTasks(paramsObj?: any): Observable<{ tasks: Task[]; total: number }> {
+    let params = new HttpParams();
+    if (paramsObj) {
+      Object.keys(paramsObj).forEach((key) => {
+        if (paramsObj[key] !== undefined && paramsObj[key] !== null) {
+          params = params.set(key, paramsObj[key]);
+        }
+      });
+    }
+
+    return this.http.get<any>(`${this.baseUrl}/my-tasks`, { params }).pipe(
       map((res) => ({
         tasks: res.data,
         total: res.total,
@@ -72,6 +92,13 @@ export class TaskService {
   updateTask(taskId: string, task: Partial<Task>): Observable<Task> {
     return this.http
       .put<any>(`${this.baseUrl}/${taskId}`, task)
+      .pipe(map((res) => res.data));
+  }
+
+  /** Update status of a task assigned to the logged-in user */
+  updateMyTaskStatus(taskId: string, status: Task['status']): Observable<Task> {
+    return this.http
+      .patch<any>(`${this.baseUrl}/${taskId}/status`, { status })
       .pipe(map((res) => res.data));
   }
 
